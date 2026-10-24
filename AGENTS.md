@@ -68,6 +68,8 @@ Prefer `uv run ...` over activating the venv manually.
 - Do **not** manually bump versions or edit `CHANGELOG.md` /
   `.release-please-manifest.json` unless explicitly asked.
 - Commit message prefixes matter: `feat`, `fix`, `docs`, `test`, `chore`, etc.
+  CI enforces Conventional Commits via `.github/workflows/commitlint.yml`
+  (`commitlint.config.mjs`). PR titles are linted too (squash-merge friendly).
 
 ## CI / publishing notes
 

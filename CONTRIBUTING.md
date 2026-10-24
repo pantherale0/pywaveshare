@@ -48,6 +48,22 @@ This repository uses [Conventional Commits](https://www.conventionalcommits.org/
 so [release-please](https://github.com/googleapis/release-please) can automate
 versioning and changelogs.
 
+CI enforces this on pull requests (every commit + the PR title) via
+`.github/workflows/commitlint.yml` and `commitlint.config.mjs`.
+
+Format:
+
+```text
+<type>(optional-scope): <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+Allowed types: `feat`, `fix`, `perf`, `refactor`, `docs`, `test`, `build`,
+`ci`, `chore`, `style`, `revert`.
+
 Examples:
 
 - `feat: add UDP reboot helper timeout option`
@@ -59,6 +75,9 @@ Examples:
 Breaking changes should use `!` or a `BREAKING CHANGE:` footer, for example:
 
 - `feat!: rename ConfigMode.WAVESHARE_8BYTE`
+
+If you squash-merge, keep the **PR title** conventional — that becomes the
+commit message on `main` that release-please reads.
 
 ## Reporting bugs
 
