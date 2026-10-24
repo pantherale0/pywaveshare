@@ -20,7 +20,8 @@ export default {
         "test",
       ],
     ],
-    "header-max-length": [2, "always", 100],
+    // Soft limit for readable subjects; release-please does not enforce length.
+    "header-max-length": [2, "always", 120],
     "subject-case": [0],
   },
 };
