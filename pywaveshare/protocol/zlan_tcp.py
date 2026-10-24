@@ -164,10 +164,7 @@ class RealComStreamFilter:
             if self._buf[:2] == b"\xfa\x07":
                 if len(self._buf) < self.REG_LEN:
                     break
-                if (
-                    self._buf[:6] == self.REG_PREFIX
-                    and self._buf[12:14] == b"\xfa\xff"
-                ):
+                if self._buf[:6] == self.REG_PREFIX and self._buf[12:14] == b"\xfa\xff":
                     mac_bytes = bytes(self._buf[6:12])
                     self.mac_address = ":".join(f"{b:02X}" for b in mac_bytes)
                     del self._buf[: self.REG_LEN]
@@ -196,9 +193,7 @@ class ZlanCommandCodec:
     def build_read_command(offset: int, length: int, *, gen2: bool = True) -> bytes:
         """Build a parameter read command (`0x80` Gen-2 with CRC16 or `0x00` Gen-1)."""
         if not (0 <= offset <= 0xFF and 1 <= length <= 0xFF):
-            raise WaveshareConfigurationError(
-                f"Invalid offset={offset} or length={length}"
-            )
+            raise WaveshareConfigurationError(f"Invalid offset={offset} or length={length}")
         if not gen2:
             return ZLAN_CMD_STREAM_MAGIC + bytes(
                 (ZlanStreamCommand.READ_PARAM_GEN1, offset, length)
@@ -228,17 +223,9 @@ class ZlanCommandCodec:
                 else ZlanStreamCommand.WRITE_FLASH_REBOOT_GEN1
             )
         elif save_to_flash:
-            cmd = (
-                ZlanStreamCommand.WRITE_FLASH_GEN2
-                if gen2
-                else ZlanStreamCommand.WRITE_FLASH_GEN1
-            )
+            cmd = ZlanStreamCommand.WRITE_FLASH_GEN2 if gen2 else ZlanStreamCommand.WRITE_FLASH_GEN1
         else:
-            cmd = (
-                ZlanStreamCommand.WRITE_RAM_GEN2
-                if gen2
-                else ZlanStreamCommand.WRITE_RAM_GEN1
-            )
+            cmd = ZlanStreamCommand.WRITE_RAM_GEN2 if gen2 else ZlanStreamCommand.WRITE_RAM_GEN1
 
         body = bytes((cmd, offset, len(payload))) + payload
         if not gen2:

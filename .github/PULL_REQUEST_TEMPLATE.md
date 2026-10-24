@@ -15,8 +15,7 @@
 
 - [ ] I followed [CONTRIBUTING.md](https://github.com/pantherale0/pywaveshare/blob/main/CONTRIBUTING.md)
 - [ ] Tests added/updated as needed
-- [ ] `uv run ruff check .` passes
-- [ ] `uv run ruff format --check .` passes
+- [ ] `uv run ruff check` / `uv run ruff format --check` pass on `pywaveshare tests scripts`
 - [ ] `uv run mypy pywaveshare` passes
 - [ ] `uv run pytest` passes
 - [ ] Docs / README updated if user-facing behavior changed

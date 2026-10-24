@@ -2,7 +2,6 @@ name: CI
 
 on:
   push:
-    branches: [main]
   pull_request:
     branches: [main]
 
@@ -16,6 +15,8 @@ permissions:
 jobs:
   lint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v5
 
@@ -32,17 +33,21 @@ jobs:
       - name: Install dependencies
         run: uv sync --frozen --extra dev
 
-      - name: Ruff check
-        run: uv run ruff check .
-
-      - name: Ruff format
-        run: uv run ruff format --check .
+      - name: Ruff
+        run: |
+          uv run ruff check pywaveshare tests scripts
+          uv run ruff format --check pywaveshare tests scripts
 
       - name: Mypy
         run: uv run mypy pywaveshare
 
   test:
     runs-on: ubuntu-latest
+    # id-token needed for Codecov OIDC when CODECOV_TOKEN is unset.
+    # Protected branches reject tokenless uploads ("Token required because branch is protected").
+    permissions:
+      contents: read
+      id-token: write
     strategy:
       fail-fast: false
       matrix:
@@ -76,7 +81,10 @@ jobs:
         if: matrix.python-version == '3.12'
         uses: codecov/codecov-action@v5
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
           files: coverage.xml
           fail_ci_if_error: true
           name: python-${{ matrix.python-version }}
+          # Protected branches require auth: set repo secret CODECOV_TOKEN, or rely on
+          # OIDC via the Codecov GitHub App (used automatically when the token is unset).
+          token: ${{ secrets.CODECOV_TOKEN }}
+          use_oidc: ${{ secrets.CODECOV_TOKEN == '' && !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }}

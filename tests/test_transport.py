@@ -26,9 +26,7 @@ async def test_open_serial_connection_uri_and_stream_io() -> None:
     """Test opening a StreamReader/StreamWriter via waveshare:// URI and exchanging data."""
     server_received: list[bytes] = []
 
-    async def handle_tcp(
-        reader: asyncio.StreamReader, writer: asyncio.StreamWriter
-    ) -> None:
+    async def handle_tcp(reader: asyncio.StreamReader, writer: asyncio.StreamWriter) -> None:
         # Immediately send greeting banner to verify pending_data buffering before connection_made
         writer.write(b"BOOT_BANNER\r\n")
         await writer.drain()
@@ -83,9 +81,7 @@ async def test_custom_subclass_with_injected_client() -> None:
     """Test subclassing WaveshareSerial and WaveshareSerialTransport with an injected client."""
     server_received: list[bytes] = []
 
-    async def handle_tcp(
-        reader: asyncio.StreamReader, writer: asyncio.StreamWriter
-    ) -> None:
+    async def handle_tcp(reader: asyncio.StreamReader, writer: asyncio.StreamWriter) -> None:
         try:
             while True:
                 data = await reader.read(1024)

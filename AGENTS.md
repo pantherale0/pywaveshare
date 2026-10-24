@@ -38,8 +38,8 @@ uv sync --extra dev
 Validate before finishing work:
 
 ```bash
-uv run ruff check .
-uv run ruff format .
+uv run ruff check pywaveshare tests scripts
+uv run ruff format pywaveshare tests scripts
 uv run mypy pywaveshare
 uv run pytest --cov=pywaveshare --cov-report=term-missing
 ```
@@ -68,10 +68,16 @@ Prefer `uv run ...` over activating the venv manually.
 - Do **not** manually bump versions or edit `CHANGELOG.md` /
   `.release-please-manifest.json` unless explicitly asked.
 - Commit message prefixes matter: `feat`, `fix`, `docs`, `test`, `chore`, etc.
+  CI enforces Conventional Commits via `.github/workflows/commitlint.yml`
+  (`commitlint.config.mjs`). PR titles are linted too (squash-merge friendly).
 
 ## CI / publishing notes
 
 - CI: `.github/workflows/ci.yml` (lint + matrix tests + Codecov)
+  - Codecov rejects tokenless uploads on protected branches. Prefer repo secret
+    `CODECOV_TOKEN` from https://app.codecov.io/gh/pantherale0/pywaveshare
+    (Settings → General → Repository upload token). If unset, CI falls back to
+    OIDC (`id-token: write`) when the Codecov GitHub App is installed.
 - Release/publish: `.github/workflows/release-please.yml`
   - PyPI uses OIDC trusted publishing with GitHub Environment `pypi`
   - Publish job is inlined because `GITHUB_TOKEN` releases do not trigger

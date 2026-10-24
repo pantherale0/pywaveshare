@@ -21,16 +21,17 @@ uv sync --extra dev
 Run the same checks CI runs before opening a PR:
 
 ```bash
-uv run ruff check .
-uv run ruff format --check .
+uv run ruff check pywaveshare tests scripts
+uv run ruff format --check pywaveshare tests scripts
 uv run mypy pywaveshare
 uv run pytest --cov=pywaveshare --cov-report=term-missing
 ```
 
-To auto-format:
+To auto-fix:
 
 ```bash
-uv run ruff format .
+uv run ruff check --fix pywaveshare tests scripts
+uv run ruff format pywaveshare tests scripts
 ```
 
 ## Pull requests
@@ -47,6 +48,22 @@ This repository uses [Conventional Commits](https://www.conventionalcommits.org/
 so [release-please](https://github.com/googleapis/release-please) can automate
 versioning and changelogs.
 
+CI enforces this on pull requests (every commit + the PR title) via
+`.github/workflows/commitlint.yml` and `commitlint.config.mjs`.
+
+Format:
+
+```text
+<type>(optional-scope): <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+Allowed types: `feat`, `fix`, `perf`, `refactor`, `docs`, `test`, `build`,
+`ci`, `chore`, `style`, `revert`.
+
 Examples:
 
 - `feat: add UDP reboot helper timeout option`
@@ -58,6 +75,9 @@ Examples:
 Breaking changes should use `!` or a `BREAKING CHANGE:` footer, for example:
 
 - `feat!: rename ConfigMode.WAVESHARE_8BYTE`
+
+If you squash-merge, keep the **PR title** conventional — that becomes the
+commit message on `main` that release-please reads.
 
 ## Reporting bugs
 

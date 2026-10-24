@@ -120,9 +120,7 @@ def build_rfc2217_configure(
     if stop_bits not in RFC2217_STOPBITS_MAP:
         raise WaveshareConfigurationError(f"Unsupported stop_bits for RFC 2217: {stop_bits}")
     if flow_control not in RFC2217_FLOW_MAP:
-        raise WaveshareConfigurationError(
-            f"Unsupported flow_control for RFC 2217: {flow_control}"
-        )
+        raise WaveshareConfigurationError(f"Unsupported flow_control for RFC 2217: {flow_control}")
 
     frames = bytearray()
     frames.extend(_build_subnegotiation(CMD_SET_BAUDRATE, struct.pack(">I", baudrate)))
@@ -131,9 +129,7 @@ def build_rfc2217_configure(
     frames.extend(
         _build_subnegotiation(CMD_SET_STOPSIZE, bytes((RFC2217_STOPBITS_MAP[stop_bits],)))
     )
-    frames.extend(
-        _build_subnegotiation(CMD_SET_CONTROL, bytes((RFC2217_FLOW_MAP[flow_control],)))
-    )
+    frames.extend(_build_subnegotiation(CMD_SET_CONTROL, bytes((RFC2217_FLOW_MAP[flow_control],))))
     return bytes(frames)
 
 
