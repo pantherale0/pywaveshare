@@ -72,6 +72,10 @@ Prefer `uv run ...` over activating the venv manually.
 ## CI / publishing notes
 
 - CI: `.github/workflows/ci.yml` (lint + matrix tests + Codecov)
+  - Codecov rejects tokenless uploads on protected branches. Prefer repo secret
+    `CODECOV_TOKEN` from https://app.codecov.io/gh/pantherale0/pywaveshare
+    (Settings → General → Repository upload token). If unset, CI falls back to
+    OIDC (`id-token: write`) when the Codecov GitHub App is installed.
 - Release/publish: `.github/workflows/release-please.yml`
   - PyPI uses OIDC trusted publishing with GitHub Environment `pypi`
   - Publish job is inlined because `GITHUB_TOKEN` releases do not trigger
