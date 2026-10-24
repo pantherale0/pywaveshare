@@ -1,0 +1,61 @@
+name: Feature request
+description: Propose a new capability or API improvement
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the problem first, then the solution you have in mind. Hardware
+        and firmware constraints are especially useful for this project.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What are you trying to do that is hard or impossible today?
+      placeholder: I need to …
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: API sketch, config-mode behavior, or workflow you want.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Workarounds or other approaches you tried.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      multiple: true
+      options:
+        - WaveshareClient API
+        - UDP discovery / management
+        - RFC2217
+        - ZLAN RealCom / Gen-2
+        - serialx transport / URI handler
+        - Docs / examples
+        - CI / packaging
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: hardware
+    attributes:
+      label: Hardware / firmware context
+      description: Models, firmware versions, or docs that motivate the request.
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Additional context

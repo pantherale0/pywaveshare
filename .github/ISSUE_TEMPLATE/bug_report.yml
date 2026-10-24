@@ -1,0 +1,99 @@
+name: Bug report
+description: Report incorrect behavior or a crash in pywaveshare
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a bug. Please fill in as much as you can — hardware and
+        config-mode details make these issues much easier to reproduce.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What went wrong in one or two sentences?
+      placeholder: WaveshareClient.connect() hangs when using ConfigMode.REALCOM…
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Minimal steps or a short script that demonstrates the issue.
+      placeholder: |
+        1. Install pywaveshare X.Y.Z
+        2. Run …
+        3. Observe …
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include traceback / logs if available.
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: pywaveshare version
+      description: PyPI version or git commit SHA.
+      placeholder: 0.1.0
+    validations:
+      required: true
+
+  - type: input
+    id: python
+    attributes:
+      label: Python version
+      placeholder: 3.12.7
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      placeholder: Fedora 44 / Ubuntu 24.04 / macOS 15
+    validations:
+      required: true
+
+  - type: input
+    id: hardware
+    attributes:
+      label: Adapter model / firmware (if known)
+      description: e.g. RS485 TO ETH (B), firmware string from device_info().
+      placeholder: RS485 TO ETH (B) / firmware …
+
+  - type: dropdown
+    id: config_mode
+    attributes:
+      label: Config mode
+      multiple: false
+      options:
+        - Not applicable / unknown
+        - RFC2217
+        - WAVESHARE_8BYTE
+        - REALCOM
+        - ZLAN_CMD_GEN2
+        - UDP_1092
+    validations:
+      required: true
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Additional context
+      description: Related issues, packet captures, Wireshark notes, etc.
