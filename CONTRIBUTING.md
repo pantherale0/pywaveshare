@@ -21,16 +21,17 @@ uv sync --extra dev
 Run the same checks CI runs before opening a PR:
 
 ```bash
-uv run ruff check .
-uv run ruff format --check .
+uv run ruff check pywaveshare tests scripts
+uv run ruff format --check pywaveshare tests scripts
 uv run mypy pywaveshare
 uv run pytest --cov=pywaveshare --cov-report=term-missing
 ```
 
-To auto-format:
+To auto-fix:
 
 ```bash
-uv run ruff format .
+uv run ruff check --fix pywaveshare tests scripts
+uv run ruff format pywaveshare tests scripts
 ```
 
 ## Pull requests

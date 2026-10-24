@@ -38,8 +38,8 @@ uv sync --extra dev
 Validate before finishing work:
 
 ```bash
-uv run ruff check .
-uv run ruff format .
+uv run ruff check pywaveshare tests scripts
+uv run ruff format pywaveshare tests scripts
 uv run mypy pywaveshare
 uv run pytest --cov=pywaveshare --cov-report=term-missing
 ```
