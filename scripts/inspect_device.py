@@ -116,9 +116,7 @@ async def _run(args: argparse.Namespace) -> int:
         if info.serial_proxies:
             print("\n  --- Exposed Serial Proxies ---")
             for proxy in info.serial_proxies:
-                print(
-                    f"  Instance {proxy.instance}: name={proxy.name!r}, type={proxy.port_type}"
-                )
+                print(f"  Instance {proxy.instance}: name={proxy.name!r}, type={proxy.port_type}")
 
         # If the user left --port at default and the device reports a custom TCP port, note it
         if args.port == DEFAULT_TCP_PORT and info.tcp_port != DEFAULT_TCP_PORT:

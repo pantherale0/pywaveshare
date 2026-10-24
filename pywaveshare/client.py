@@ -426,16 +426,8 @@ class WaveshareClient:
         if not self.is_connected or self._transport is None:
             raise WaveshareConnectionError("Cannot configure serial port when TCP is not connected")
 
-        flow_enum = (
-            SerialProxyFlowControl.CTS_RTS
-            if flow_control
-            else SerialProxyFlowControl.NONE
-        )
-        stop_enum = (
-            SerialProxyStopBits.TWO
-            if stop_bits == 2
-            else SerialProxyStopBits.ONE
-        )
+        flow_enum = SerialProxyFlowControl.CTS_RTS if flow_control else SerialProxyFlowControl.NONE
+        stop_enum = SerialProxyStopBits.TWO if stop_bits == 2 else SerialProxyStopBits.ONE
         new_config = WaveshareSerialConfig(
             baudrate=baudrate,
             data_size=data_size,
@@ -562,9 +554,7 @@ class WaveshareClient:
     ) -> SerialProxyRequestResponse:
         """Set RTS and/or DTR modem control pin states."""
         if not self.is_connected or self._transport is None:
-            raise WaveshareConnectionError(
-                "Cannot set modem pins when TCP is not connected"
-            )
+            raise WaveshareConnectionError("Cannot set modem pins when TCP is not connected")
 
         rts = bool(line_states & LineStateFlag.RTS)
         dtr = bool(line_states & LineStateFlag.DTR)

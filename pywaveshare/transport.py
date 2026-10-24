@@ -169,9 +169,7 @@ if TYPE_CHECKING or not HAS_SERIALX:
             self._baudrate = int(baudrate)
             self._byte_size = int(byte_size)
             self._parity = Parity(parity) if not isinstance(parity, Parity) else parity
-            self._stopbits = (
-                StopBits(stopbits) if not isinstance(stopbits, StopBits) else stopbits
-            )
+            self._stopbits = StopBits(stopbits) if not isinstance(stopbits, StopBits) else stopbits
             self._xonxoff = bool(xonxoff)
             self._rtscts = bool(rtscts)
             self._dsrdtr = bool(dsrdtr)
@@ -235,14 +233,10 @@ if TYPE_CHECKING or not HAS_SERIALX:
         def _close(self) -> None:
             raise NotImplementedError
 
-        def _write(
-            self, b: bytes | bytearray | memoryview, *, timeout: float | None
-        ) -> int:
+        def _write(self, b: bytes | bytearray | memoryview, *, timeout: float | None) -> int:
             raise NotImplementedError
 
-        def _readinto(
-            self, b: bytearray | memoryview, *, timeout: float | None
-        ) -> int:
+        def _readinto(self, b: bytearray | memoryview, *, timeout: float | None) -> int:
             raise NotImplementedError
 
         def _flush(self) -> None:
@@ -262,9 +256,7 @@ if TYPE_CHECKING or not HAS_SERIALX:
     class BaseSerialTransport(asyncio.Transport):
         """Fallback async serial transport base class when serialx is not installed."""
 
-        def __init__(
-            self, loop: asyncio.AbstractEventLoop, protocol: asyncio.Protocol
-        ) -> None:
+        def __init__(self, loop: asyncio.AbstractEventLoop, protocol: asyncio.Protocol) -> None:
             super().__init__()
             self._loop = loop
             self._protocol = protocol
@@ -388,9 +380,7 @@ STATUS_TO_ERROR_MAP: dict[
     SerialProxyStatus.PORT_IN_USE: lambda msg: OSError(
         errno.EBUSY, f"Serial proxy port is already in use: {msg}"
     ),
-    SerialProxyStatus.INVALID_ARGUMENT: lambda msg: SerialException(
-        f"Operation is invalid: {msg}"
-    ),
+    SerialProxyStatus.INVALID_ARGUMENT: lambda msg: SerialException(f"Operation is invalid: {msg}"),
 }
 
 
@@ -425,9 +415,7 @@ def connection_closed_error(event: ConnectionClosedEvent) -> OSError:
         return exc
 
     if event.reason is not DisconnectReason.UNSPECIFIED:
-        return OSError(
-            errno.EIO, f"Waveshare device closed the connection: {event.reason.name}"
-        )
+        return OSError(errno.EIO, f"Waveshare device closed the connection: {event.reason.name}")
 
     return OSError(errno.EIO, "Waveshare connection closed")
 
@@ -512,9 +500,7 @@ class WaveshareSerial(BaseSerial):
         client_loop = self._client_loop
         if client_loop is None or client_loop is self._loop:
             return await coro
-        return await asyncio.wrap_future(
-            asyncio.run_coroutine_threadsafe(coro, client_loop)
-        )
+        return await asyncio.wrap_future(asyncio.run_coroutine_threadsafe(coro, client_loop))
 
     async def _call_on_client_loop_validated(self, coro: Coroutine[Any, Any, _T]) -> _T:
         result = await self._call_on_client_loop(coro)
@@ -639,9 +625,7 @@ class WaveshareSerial(BaseSerial):
                 await self._call_on_client_loop(self._client.connect(fetch_info=False))
 
         if self._closed_unsub is None:
-            self._closed_unsub = await self._call_on_client_loop(
-                self._register_closed_handler()
-            )
+            self._closed_unsub = await self._call_on_client_loop(self._register_closed_handler())
 
     async def _register_closed_handler(self) -> Callable[[], None]:
         assert self._client is not None
@@ -671,9 +655,7 @@ class WaveshareSerial(BaseSerial):
             return
 
         info = await self._call_on_client_loop(self._client.device_info())
-        name_to_info = {
-            proxy.name: (proxy.instance, proxy) for proxy in info.serial_proxies
-        }
+        name_to_info = {proxy.name: (proxy.instance, proxy) for proxy in info.serial_proxies}
         if self._port_name not in name_to_info:
             known = list(name_to_info)
             raise ValueError(
@@ -812,9 +794,7 @@ class WaveshareSerial(BaseSerial):
     def _flush(self) -> None:
         self._call_on_loop(self._async_flush())
 
-    def _write(
-        self, b: bytes | bytearray | memoryview, *, timeout: float | None
-    ) -> int:
+    def _write(self, b: bytes | bytearray | memoryview, *, timeout: float | None) -> int:
         assert self._client is not None
         instance_id = self._instance_id if self._instance_id is not None else 0
         data = bytes(b)
@@ -823,17 +803,13 @@ class WaveshareSerial(BaseSerial):
         )
         return len(data)
 
-    def _readinto(
-        self, b: bytearray | memoryview, *, timeout: float | None
-    ) -> int:
+    def _readinto(self, b: bytearray | memoryview, *, timeout: float | None) -> int:
         try:
             return self._call_on_loop(self._async_readinto(b, timeout))
         except TimeoutError:
             return 0
 
-    async def _async_readinto(
-        self, b: bytearray | memoryview, timeout: float | None
-    ) -> int:
+    async def _async_readinto(self, b: bytearray | memoryview, timeout: float | None) -> int:
         async with asyncio.timeout(timeout):
             while not self._read_buffer:
                 self._check_broken()
@@ -919,9 +895,7 @@ class WaveshareSerialTransport(BaseSerialTransport):
     _serial_cls: type[WaveshareSerial] = WaveshareSerial
     _serial: WaveshareSerial | None
 
-    def __init__(
-        self, loop: asyncio.AbstractEventLoop, protocol: asyncio.Protocol
-    ) -> None:
+    def __init__(self, loop: asyncio.AbstractEventLoop, protocol: asyncio.Protocol) -> None:
         """Initialize the Waveshare serial transport."""
         super().__init__(loop, protocol)
         self._serial = None
@@ -933,9 +907,7 @@ class WaveshareSerialTransport(BaseSerialTransport):
             self._extra: dict[str, Any] = {}
 
     @translate_waveshare_errors
-    async def _connect(
-        self, *, path: str | None = None, **kwargs: Any
-    ) -> None:
+    async def _connect(self, *, path: str | None = None, **kwargs: Any) -> None:
         self._serial = self._serial_cls(loop=self._loop, path=path, **kwargs)
         self._extra["serial"] = self._serial
 
@@ -1009,10 +981,7 @@ class WaveshareSerialTransport(BaseSerialTransport):
 
     def _on_data(self, msg: SerialProxyDataReceived) -> None:
         assert self._serial is not None
-        if (
-            self._serial._instance_id is not None
-            and msg.instance != self._serial._instance_id
-        ):
+        if self._serial._instance_id is not None and msg.instance != self._serial._instance_id:
             return
 
         client_loop = self._serial._client_loop
@@ -1082,9 +1051,7 @@ class WaveshareSerialTransport(BaseSerialTransport):
         """Abort the transport immediately."""
         self.close()
 
-    async def _async_close(
-        self, client: WaveshareClient, exc: OSError | None
-    ) -> None:
+    async def _async_close(self, client: WaveshareClient, exc: OSError | None) -> None:
         assert self._serial is not None
         try:
             await self._serial._call_on_client_loop(client.disconnect())
@@ -1125,9 +1092,7 @@ def waveshare_list_serial_ports(*args: Any, **kwargs: Any) -> list[SerialPortInf
         serial._close()
 
 
-async def async_waveshare_list_serial_ports(
-    *args: Any, **kwargs: Any
-) -> list[SerialPortInfo]:
+async def async_waveshare_list_serial_ports(*args: Any, **kwargs: Any) -> list[SerialPortInfo]:
     """List serial ports exposed by a Waveshare adapter asynchronously."""
     serial = WaveshareSerial(*args, **kwargs)
     try:

@@ -26,9 +26,7 @@ async def test_client_lifecycle_and_serial_proxy_modes() -> None:
     server_writers: list[asyncio.StreamWriter] = []
     client_connected_event = asyncio.Event()
 
-    async def handle_tcp(
-        reader: asyncio.StreamReader, writer: asyncio.StreamWriter
-    ) -> None:
+    async def handle_tcp(reader: asyncio.StreamReader, writer: asyncio.StreamWriter) -> None:
         server_writers.append(writer)
         client_connected_event.set()
         try:

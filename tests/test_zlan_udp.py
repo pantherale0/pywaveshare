@@ -177,9 +177,7 @@ def test_build_serial_update_packet() -> None:
     assert flash_pkt[:3] == b"ZL\x07"
 
     with pytest.raises(WaveshareConfigurationError, match="Unsupported baudrate"):
-        build_zlan_serial_update_packet(
-            device_id, WaveshareSerialConfig(baudrate=12345)
-        )
+        build_zlan_serial_update_packet(device_id, WaveshareSerialConfig(baudrate=12345))
 
 
 def test_build_query_discover_reboot_packets() -> None:
@@ -208,9 +206,7 @@ async def test_async_udp_operations() -> None:
             if data[:2] == b"ZL":
                 cmd = data[2]
                 received_commands.append(cmd)
-                self.transport.sendto(
-                    make_udp_response(txd_cnt=100, rxd_cnt=200), addr
-                )
+                self.transport.sendto(make_udp_response(txd_cnt=100, rxd_cnt=200), addr)
 
     loop = asyncio.get_running_loop()
     transport, _ = await loop.create_datagram_endpoint(
@@ -245,9 +241,7 @@ async def test_async_udp_operations() -> None:
 
         # 4. Reboot UDP
         assert info.raw_params is not None
-        await async_reboot_device_udp(
-            "127.0.0.1", info.raw_params, port=udp_port
-        )
+        await async_reboot_device_udp("127.0.0.1", info.raw_params, port=udp_port)
         await asyncio.sleep(0.05)
         assert ZlanUdpCommand.REBOOT in received_commands
     finally:
